@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Delete, Param } from '@nestjs/common';
+import { Body, Controller, Post, Delete, Param, Get } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './category.entity';
@@ -7,6 +7,11 @@ import { Category } from './category.entity';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) { }
 
+  @Get()
+  findAll() {
+    return this.categoryService.findAll();
+  }
+  
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto): Promise<Category> {
     console.log('category controlador', createCategoryDto)

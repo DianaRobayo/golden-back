@@ -11,12 +11,18 @@ export class Product {
   
     @Column("varchar", { length: 200 })
     description: string;
+
+    @Column("varchar", { length: 45 })
+    material: string;
   
     @Column("varchar", { length: 200 })
     url_image: string;
   
     @Column({ type: "int", default: 0 })
     price: number;
+
+    @Column({ type: "boolean", default: 0 })
+    privilege: boolean;
 
     @Column()
     id_category: number;

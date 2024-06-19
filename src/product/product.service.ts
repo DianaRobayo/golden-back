@@ -24,15 +24,22 @@ export class ProductService {
     return objProduct;
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findAll() {
+    const objProduct = await this.productRepository.findBy({});
+    return objProduct;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    const objProduct = await this.productRepository.findOneBy(
+      {id_product: id}
+    );
+    return objProduct;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const objProduct = await this.productRepository.findOneBy(
+      {id_product: id}
+    );
     return `This action updates a #${id} product`;
   }
 

@@ -11,8 +11,9 @@ export class CategoryService {
     private categoryRepository: Repository<Category>,
   ) {}
 
-  findAll(): Promise<Category[]> {
-    return this.categoryRepository.find();
+  async findAll(): Promise<Category[]> {
+    const objCategories = await this.categoryRepository.findBy({});
+    return objCategories;
   }
 
   findOne(id_category: number): Promise<Category | null> {

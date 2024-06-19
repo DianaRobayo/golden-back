@@ -22,7 +22,7 @@ import { Category } from './category/category.entity';
       database: 'project_golden',
       entities: [User, Role, Product, Category],
       // autoLoadEntities: true,
-      synchronize: true, // en producción no se puede dejar en true porque se pierde datos  
+      synchronize: false, // en producción no se puede dejar en true porque se pierde datos  
     }),
     UsersModule,
     RoleModule,
