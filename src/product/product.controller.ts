@@ -1,18 +1,34 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, HttpCode, Res, Render } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, HttpCode, UseInterceptors, UploadedFile, Req } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './product.entity';
-import { Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { Request } from 'express';
 
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService
+  ) { }
 
   @Post()
   @HttpCode(201)
-  create(@Body() createProductDto: CreateProductDto): Promise<Product> {
-    console.log('product controlador', createProductDto)
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, './img')
+      },
+      filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        // cb(null, file.fieldname + '-' + uniqueSuffix)
+        cb(null, file.originalname)
+      }
+    })
+  }))
+  create(@Body() createProductDto: CreateProductDto, @UploadedFile() file: Express.Multer.File): Promise<Product> {
+    console.log('product controlador', createProductDto)   
+
     return this.productService.create(createProductDto);
   }
 
@@ -23,22 +39,55 @@ export class ProductController {
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  async findAll(@Req() req: Request) {
+    // console.log('categoria', this.categoryService.findAll())
+    return await this.productService.findAll(req);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.productService.findOne(+id);
+  async findOne(@Param('id') id: string, @Req() req: Request) {
+    return await this.productService.findOne(+id, req);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, './img')
+      },
+      filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        // cb(null, file.fieldname + '-' + uniqueSuffix)
+        cb(null, file.originalname)
+      }
+    })
+  }))
+  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto, @UploadedFile() file: Express.Multer.File, @Req() req: Request) {
+    return this.productService.update(+id, updateProductDto, file, req);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productService.remove(+id);
+  }
+
+  @Post('upload')
+  // @UseInterceptors(FileInterceptor('file', {dest: './img'}))
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, './img')
+      },
+      filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        // cb(null, file.fieldname + '-' + uniqueSuffix)
+        cb(null, file.originalname)
+      }
+    })
+  }))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+    return file;
+    // return this.productService.create(createProductDto);
   }
 }

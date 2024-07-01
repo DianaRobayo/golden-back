@@ -15,4 +15,7 @@ export class CreateProductDto {
 
   @ApiProperty()
   id_category: number;
+  
+  @ApiProperty()
+  categoryIdCategory: number;
 }

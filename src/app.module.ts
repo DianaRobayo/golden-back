@@ -10,6 +10,8 @@ import { RoleModule } from './role/role.module';
 import { Role } from './role/role.entity';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/category.entity';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -27,7 +29,13 @@ import { Category } from './category/category.entity';
     UsersModule,
     RoleModule,
     CategoryModule,
-    ProductModule    
+    ProductModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'img'),
+    }),
+    // MulterModule.register({
+    //   dest: './img',
+    // })
   ],
   controllers: [AppController],
   providers: [AppService],

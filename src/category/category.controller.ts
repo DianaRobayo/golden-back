@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Delete, Param, Get } from '@nestjs/common';
+import { Body, Controller, Post, Delete, Param, Get, Put } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './category.entity';
@@ -20,8 +20,12 @@ export class CategoryController {
 
   @Post('find-category')
   async getCategory(@Body() body): Promise<Category> {
-    // console.log('email controlador', body.email)
     return await this.categoryService.getCategory(body.category_name);
+  }
+  
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateProductDto: CreateCategoryDto) {
+    return this.categoryService.update(+id, updateProductDto);
   }
 
   @Delete(':id')

@@ -3,6 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Product {
+
     @PrimaryGeneratedColumn()
     id_product: number;
   
@@ -26,6 +27,9 @@ export class Product {
 
     @Column()
     id_category: number;
+
+    @Column()
+    categoryIdCategory: number;
 
     @ManyToOne(() => Category, (category) => category.id_category)
     category: Category
