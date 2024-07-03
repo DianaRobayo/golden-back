@@ -12,6 +12,23 @@ export class ProductController {
   constructor(private readonly productService: ProductService
   ) { }
 
+  @Get()
+  async findAll(@Req() req: Request) {
+    // console.log('categoria', this.categoryService.findAll())
+    return await this.productService.findAll(req);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string, @Req() req: Request) {
+    return await this.productService.findOne(+id, req);
+  }
+
+  @Post('find-product')
+  async getProduct(@Body() body): Promise<Product> {
+    // console.log('nombre product controlador', body.product_name)
+    return await this.productService.getProduct(body.product_name);
+  }
+
   @Post()
   @HttpCode(201)
   @UseInterceptors(FileInterceptor('file', {
@@ -26,27 +43,12 @@ export class ProductController {
       }
     })
   }))
-  create(@Body() createProductDto: CreateProductDto, @UploadedFile() file: Express.Multer.File): Promise<Product> {
+  create(@Body() createProductDto: CreateProductDto, 
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request): Promise<Product> {
     console.log('product controlador', createProductDto)   
 
-    return this.productService.create(createProductDto);
-  }
-
-  @Post('find-product')
-  async getProduct(@Body() body): Promise<Product> {
-    // console.log('nombre product controlador', body.product_name)
-    return await this.productService.getProduct(body.product_name);
-  }
-
-  @Get()
-  async findAll(@Req() req: Request) {
-    // console.log('categoria', this.categoryService.findAll())
-    return await this.productService.findAll(req);
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: string, @Req() req: Request) {
-    return await this.productService.findOne(+id, req);
+    return this.productService.create(createProductDto, file, req);
   }
 
   @Put(':id')
@@ -62,7 +64,10 @@ export class ProductController {
       }
     })
   }))
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto, @UploadedFile() file: Express.Multer.File, @Req() req: Request) {
+  update(@Param('id') id: string, 
+    @Body() updateProductDto: UpdateProductDto, 
+    @UploadedFile() file: Express.Multer.File, 
+    @Req() req: Request) {
     return this.productService.update(+id, updateProductDto, file, req);
   }
 

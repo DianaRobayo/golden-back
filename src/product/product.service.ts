@@ -47,8 +47,18 @@ export class ProductService {
     return objProduct;
   }
 
-  create(createProductDto: CreateProductDto) {
+  create(createProductDto: CreateProductDto, file, req) {
     const product = this.productRepository.create(createProductDto);
+
+    const url = `${req.protocol}://${req.get('Host')}`;
+    const image = url + product.url_image;
+    if (typeof file !== 'undefined') {
+      const currentPath = file.path;
+      const newPath = currentPath.replace('img\\', '/');
+      product.url_image = newPath;
+    }
+    product.categoryIdCategory = product.id_category;
+
     return this.productRepository.save(product);
   }
 
@@ -57,18 +67,15 @@ export class ProductService {
       { id_product: id }
     );
 
-    console.log('updateProductDto', updateProductDto)
-    console.log('objProduct', objProduct)
-
     const url = `${req.protocol}://${req.get('Host')}`;
     const image = url + objProduct.url_image;
-    if(typeof file !== 'undefined'){
+    if (typeof file !== 'undefined') {
       const currentPath = file.path;
       const newPath = currentPath.replace('img\\', '/');
       updateProductDto.url_image = newPath;
     } else {
       updateProductDto.url_image = objProduct.url_image;
-    }  
+    }
 
     updateProductDto.categoryIdCategory = updateProductDto.id_category;
     objProduct = Object.assign(objProduct, updateProductDto);
