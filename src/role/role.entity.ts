@@ -17,7 +17,7 @@ export class Role {
   })
   rol: UserRole
 
-  @ManyToOne(() => User, (user) => user.id_rol)
-  user: User
+  @OneToMany(() => User, (user) => user.roles)
+  users: User[];
 
 }

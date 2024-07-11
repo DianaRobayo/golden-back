@@ -19,9 +19,8 @@ export class User {
   password: string;
 
   @Column()
-  id_rol: number;
+  rolesIdRol: number;
 
-  @OneToMany(() => Role, (rol) => rol.id_rol)
-  rol: Role[];
-
+  @ManyToOne(() => Role, (rol) => rol.users)
+  roles: Role
 }

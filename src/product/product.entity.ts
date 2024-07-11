@@ -26,11 +26,8 @@ export class Product {
     privilege: boolean;
 
     @Column()
-    id_category: number;
+    categoriesIdCategory: number;        
 
-    @Column()
-    categoryIdCategory: number;
-
-    @ManyToOne(() => Category, (category) => category.id_category)
-    category: Category
+    @ManyToOne(() => Category, (category) => category.products)
+    categories: Category
 }

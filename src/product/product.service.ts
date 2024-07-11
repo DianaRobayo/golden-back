@@ -17,7 +17,7 @@ export class ProductService {
     //relations llave foreanea
     const objProduct = await this.productRepository.find({
       relations: {
-        category: true
+        categories: true
       }
     });
 
@@ -57,7 +57,7 @@ export class ProductService {
       const newPath = currentPath.replace('img\\', '/');
       product.url_image = newPath;
     }
-    product.categoryIdCategory = product.id_category;
+    // product.idCategoryIdCategory = product.id_category;
 
     return this.productRepository.save(product);
   }
@@ -77,13 +77,13 @@ export class ProductService {
       updateProductDto.url_image = objProduct.url_image;
     }
 
-    updateProductDto.categoryIdCategory = updateProductDto.id_category;
+    // updateProductDto.categoryIdCategory = updateProductDto.id_category;
     objProduct = Object.assign(objProduct, updateProductDto);
     this.productRepository.save(objProduct);
     return objProduct;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    await this.productRepository.delete(id);
   }
 }

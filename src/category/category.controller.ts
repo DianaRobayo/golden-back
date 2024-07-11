@@ -11,6 +11,11 @@ export class CategoryController {
   findAll() {
     return this.categoryService.findAll();
   }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.categoryService.findOne(+id);
+  }
   
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto): Promise<Category> {

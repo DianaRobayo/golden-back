@@ -13,8 +13,8 @@ export class CreateUserDto {
   @ApiProperty()
   password: string;
 
-  @ApiProperty()
-  id_rol: number;
+  // @ApiProperty()
+  // id_rol: number;
 }
 
 

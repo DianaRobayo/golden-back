@@ -12,6 +12,7 @@ import { CategoryModule } from './category/category.module';
 import { Category } from './category/category.entity';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'img'),
     }),
+    AuthModule,
     // MulterModule.register({
     //   dest: './img',
     // })
