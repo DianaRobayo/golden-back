@@ -17,13 +17,11 @@ export class UsersController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    // console.log('user controlador', createUserDto)
     return this.usersService.create(createUserDto);
   }
 
   @Post('find-user')
   async getUser(@Body() body): Promise<User> {
-    // console.log('email controlador', body.email)
     return await this.usersService.getUser(body.email);
   }
 

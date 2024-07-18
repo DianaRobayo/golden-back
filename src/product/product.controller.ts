@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, HttpCode, UseInterceptors, UploadedFile, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, HttpCode, UseInterceptors, UploadedFile, Req, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -6,6 +6,7 @@ import { Product } from './product.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Request } from 'express';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('product')
 export class ProductController {
@@ -14,7 +15,6 @@ export class ProductController {
 
   @Get()
   async findAll(@Req() req: Request) {
-    // console.log('categoria', this.categoryService.findAll())
     return await this.productService.findAll(req);
   }
 
@@ -25,10 +25,10 @@ export class ProductController {
 
   @Post('find-product')
   async getProduct(@Body() body): Promise<Product> {
-    // console.log('nombre product controlador', body.product_name)
     return await this.productService.getProduct(body.product_name);
   }
 
+  @UseGuards(AuthGuard)
   @Post()
   @HttpCode(201)
   @UseInterceptors(FileInterceptor('file', {
@@ -45,12 +45,12 @@ export class ProductController {
   }))
   create(@Body() createProductDto: CreateProductDto, 
     @UploadedFile() file: Express.Multer.File,
-    @Req() req: Request): Promise<Product> {
-    console.log('product controlador', createProductDto)   
+    @Req() req: Request): Promise<Product> { 
 
     return this.productService.create(createProductDto, file, req);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
@@ -71,6 +71,7 @@ export class ProductController {
     return this.productService.update(+id, updateProductDto, file, req);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productService.remove(+id);
@@ -91,7 +92,6 @@ export class ProductController {
     })
   }))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
     return file;
     // return this.productService.create(createProductDto);
   }

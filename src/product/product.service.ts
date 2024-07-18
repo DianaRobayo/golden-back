@@ -36,7 +36,6 @@ export class ProductService {
     const url = `${req.protocol}://${req.get('Host')}`;
     objProduct.url_image = url + objProduct.url_image;
 
-    console.log('req', url)
     return objProduct;
   }
 
